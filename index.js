@@ -1,32 +1,4 @@
-/**
- * 
- * SOLICITAR TURNOS:
- * Se interactúa con un calendario del mes de opctubre donde el usuario puede elegir un turno a través de un formulario
- * este debe completarlo y una vez que se valide. Si el turno no está ocupado, se guarda como un objeto Persona
- * y también en un array de objetos que permite que persista la información por medio de localStorage
- * Hay varias interacciones con el DOM, se crea un mensaje emergente luego de la creación de un objeto.
- * este usa un método que genera un string, que luego será mostrado por el DOM durante 8 segundos
- * Además de tener los botones de eliminar un turno o todos a la vez
- * Cuando se genera un turno en cada casillero se genera un botón que permite ver lo datos guardados para dicho turno 
 
- * Para la Segunda Entrega del Proyecto Final se intrujeron los siguientes conceptos:
-
-    objetos con propiedades y métodos
-    Modificar el DOM desde JavaScript.
-    Usar eventos.
-    Usar localStorage.
-
------------ OPERADORES TERNARIOS Y DESESTRUCTURACIÓN ------------
-* Se agrega un selector de tema, que cambia el background del body en el archivo toggle.js
- 
-* Se aplica en toggle.js operadores ternarios
-* en este documento se aplica en la función obtenerTurnosLS(), línea 353 la desestructuración
-
------------- LIBRERÍAS ---------------
-* Se utiliza sweetalert2 para cambiar todos los alert y confirm de la app
-lineas: 92, 102, 162, 187, 219, 251, 264, 307, 315
-    
-*/
 
 // ----------DECLARACION DE VARIABLES-------
 
@@ -98,7 +70,6 @@ function comprobarTurno(diaObtenido) {
     }
     else if (found2) {
 
-
         Swal.fire({
             title: '¿Domingo?',
             text: 'Disculpe no hay turnos los días domingos',
@@ -108,8 +79,6 @@ function comprobarTurno(diaObtenido) {
     }
     else {
         mostrar = guardarDatos()
-
-
         ocupado(diaObtenido, mostrar, true);
         mostrar.splice(0, 3)
     }
@@ -130,8 +99,7 @@ function guardarDatos() {
 function ocupado(numero, array, boolTurnosLS, id = undefined) {
 
     string = `Día: ${numero} Nombre: ${array[0]}, Apellido: ${array[1]}, Edad: ${array[2]}`
-    // console.log(nodoLi.item(numero + 6).innerText.length)
-    // console.log(nodoLi.item(numero + 6).innerText)
+
     if (nodoLi.item(numero + 6).innerText.length === 2) {
 
         let ocupado= undefined;
@@ -141,7 +109,7 @@ function ocupado(numero, array, boolTurnosLS, id = undefined) {
             ocupado = document.getElementById(`0${numero}`)
             
             ide = agregarBoton(`0${numero}`)
-            // numero = `0${numero}`
+
         }
 
         else {
@@ -157,9 +125,6 @@ function ocupado(numero, array, boolTurnosLS, id = undefined) {
         form.reset()
 
         turnoSolicitado(numero, array, boolTurnosLS, id)
-
-        // if (boolTurnosLS) return actualizarTurnosLS()
-
 
     }
 
@@ -207,9 +172,6 @@ function eventoEliminarTurno() {
 
     btnEliminar.onclick = () => {
         
-        
-        // const found = datos.find(fecha =>  === "10/10/2022");
-
         if (identificador.value > 0 && identificador.value <= 31) {
             let comprobar;
             let fechaTomada = Number(identificador.value)
@@ -223,9 +185,9 @@ function eventoEliminarTurno() {
                 comprobar = document.getElementById(fechaTomada)
 
             }
-            // console.log(fechaTomada.toString())
+
             for (const data of datos) {
-                // console.log(data.turno.slice(0, 2))
+
                 if (data.turno.slice(0, 2) === fechaTomada.toString()) {
                     
                     eliminarDeApi(data.id)
@@ -253,7 +215,6 @@ function eventoEliminarTurno() {
                         );
 
                         datos.splice(indiceBorrar, 1);
-                        // actualizarTurnosLS()
                         identificador.value = ""
                         Swal.fire(
                             'Eliminado!',
@@ -372,9 +333,6 @@ function eliminarAllTurnos() {
             })
         }
 
-        // actualizarTurnosLS()
-
-
     }
 }
 
@@ -393,14 +351,14 @@ function agregarAnimacion() {
 
 // Funcion que guarda el objeto Persona en un array de objetos
 function turnoSolicitado(turnoGuardado, datosRecibidos, boolMostrarPersona, id) {
-    // let turnoDado = turnoGuardado
+
     if (turnoGuardado < 10) {
         turnoGuardado = `0${turnoGuardado}/10/22`
     }
     else{
         turnoGuardado = `${turnoGuardado}/10/22`
     }
-    // console.log(turnoGuardado)
+
     let persona = new Persona(id, datosRecibidos[0], datosRecibidos[1], datosRecibidos[2], turnoGuardado)
     const usuario = {
         nombre: datosRecibidos[0],
@@ -409,11 +367,11 @@ function turnoSolicitado(turnoGuardado, datosRecibidos, boolMostrarPersona, id) 
         fecha: turnoGuardado,
     }
     datos.push(persona);
-
+    
     if (boolMostrarPersona) {
-        // let persona = new Persona(turnoGuardado, datosRecibidos[0], datosRecibidos[1], datosRecibidos[2], turnoDado)
+
         let datosAMostrar = persona.mostrarPersona()
-        // datos.push(persona);
+
         enviarAApi(usuario)
         mostrarH2(datosAMostrar)
         agregarAnimacion()
@@ -463,7 +421,6 @@ function ejecutarSubmit() {
         let verificarFecha = parseInt(data.value.substring(8, 10))
 
         comprobarTurno(verificarFecha)
-        // productos()
     })
 
 }
@@ -472,97 +429,52 @@ function ejecutarSubmit() {
 
 async function conectarApi(bool) {
     datos = []
-    // console.log(datos)
+
     const response = await fetch("https://63430787ba4478d47847243b.mockapi.io/api/turnero").then((response) => response.json()).then((data) => {
-        // fetch("http://127.0.0.1:8000/api/projects/").then((response) => response.json()).then((data) => {
-        // console.log(data)
+ 
         for (let dato of data) {
-            // datos.push(dato)
+
             const { nombre, apellido, edad, fecha, id } = dato
-            // console.log(fecha)
+
             let identificador = parseInt(fecha.substring(0, 2))
             let lista = [nombre, apellido, edad]
             
-            // datos.push(dato)
 
             if (bool) {
-                // console.log(identificador)
                 ocupado(identificador, lista, false, id)
             }
             else{
                 
                 turnoSolicitado(identificador, lista, false, id)
             }
-
         }
-
     })
-    // console.log(datos)
-
 
 }
 
 
 async function enviarAApi(usuario) {
 
-
-    // let base = [usuario.nombre, usuario.apellido, usuario.edad]
-    // let jsonListo = JSON.stringify(usuario)
-    // console.log(jsonListo)
-    // const response = await fetch("https://api-coder.onrender.com/api/projects/", {
-    // const response = await fetch("http://127.0.0.1:8000/api/projects/", {
-
-    //     method: 'POST',
-    //     mode: 'cors',
-    //     body: JSON.stringify(usuario),
-    //     headers: {
-    //         'Content-type': 'aplication/json; charset=UTF-8',
-    //     }
-
-    // })
-    // .then((response) => response.json()).then((data) => console.log(data))
     const response = await fetch('https://63430787ba4478d47847243b.mockapi.io/api/turnero', {
-        //     // mode: 'no-cors',
         method: 'POST',
-        //     // body: JSON.stringify({
-        //     //     nombre: 'foo',
-        //     //     apellido: 'bar',
-        //     //     edad: 1,
-        //     //     fecha: "13/10/2022"
-        //     // }),
-        // body: JSON.stringify(base),
         body: JSON.stringify(usuario),
         headers: {
             'Content-type': 'application/json; charset=UTF-8',
         },
     })
         .then((response) => response.json())
-        .then((json) => {
-            // datos.push(json)
-
-
-            // datos.splice(0, datos.length)
-            conectarApi(false)
-            // console.log(datos)
-        });
+        .then(conectarApi(false));
 }
 
-function boton() {
-    let botonP = document.getElementById("probar")
-    botonP.onclick = () => {
-        // eliminarDeApi()
 
-    }
-}
+
 
 async function eliminarDeApi(id) {
-// async function eliminarDeApi() {
     const response = await fetch(`https://63430787ba4478d47847243b.mockapi.io/api/turnero/${id}`, {
-    // const response = await fetch(`https://63430787ba4478d47847243b.mockapi.io/api/turnero/`, {
         method: 'DELETE',
     })
-        .then((response) => response.json())
-        .then((json) => console.log(json));
+      .then((response) => response.json())
+      .then((json) => console.log(json));
 }
 
 
@@ -571,13 +483,10 @@ async function eliminarDeApi(id) {
 function main() {
     asignarID()
     finDeSemana()
-    // obtenerTurnosLS()
     ejecutarSubmit()
     eventoEliminarTurno()
     eliminarAllTurnos()
-    conectarApi(true)
-    // console.log(datos)
-    boton()
+    conectarApi(true)    
 }
 
 main();
